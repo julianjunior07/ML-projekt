@@ -42,17 +42,14 @@ def model_func():
     
     
     #model
-    forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=123), 
+    regressor = RandomForestRegressor(max_depth=4, n_estimators=100, random_state=1)
+    steps = len(test_data)
+    forecaster = ForecasterAutoreg(regressor = regressor, 
                                    lags=10
                                    )
     forecaster.fit(y=train_data['value'])
-    #print(forecaster)
-    
-    steps = len(test_data)
     predictions = forecaster.predict(steps=steps)
-    predictions.head(5)
     
-        
     
     #ploty, ploteczki
     fig, ax = plt.subplots(figsize=(15,5))
