@@ -18,12 +18,13 @@ def read_from_file():
     #print(node_destination)
     
     #odczyt wartosci bitrate 
-    for line in file1:
-        measurements.append(line.rstrip())
+    # for line in file1:
+    #     measurements.append(line.rstrip())
+    
     #jesli chcemy tylko okreslona liczbe
-    # for i in range(1000):
-    #    line = next(file1).strip()
-    #    measurements.append(line)
+    for i in range(2000):
+       line = next(file1).strip()
+       measurements.append(line)
         
     #konwersja na floaty
     for i in range(0, len(measurements)):

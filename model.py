@@ -25,7 +25,7 @@ def model_func():
     df = pd.DataFrame(dict)
     
     #podział danych na treningowe i testowe
-    ratio = 0.9
+    ratio = 0.85
     total_rows = df.shape[0]
     train_size = int(total_rows*ratio)
     
@@ -37,15 +37,16 @@ def model_func():
     # print("test")
     # print(test_data)
     
-    # print(train_data.shape)
-    # print(test_data.shape)
+    print(df.shape)
+    print(train_data.shape)
+    print(test_data.shape)
     
     
     #model
-    regressor = RandomForestRegressor(max_depth=4, n_estimators=100, random_state=1)
+    regressor = RandomForestRegressor(max_depth=5, n_estimators=1000, random_state=123)
     steps = len(test_data)
-    forecaster = ForecasterAutoreg(regressor = regressor, 
-                                   lags=10
+    forecaster = ForecasterAutoreg(regressor = regressor,
+                                   lags=1600
                                    )
     forecaster.fit(y=train_data['value'])
     predictions = forecaster.predict(steps=steps)
