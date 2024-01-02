@@ -66,7 +66,7 @@ def model_func():
     # predictions = forecaster.predict(steps=steps)
     
     # Create sequences and labels for training data
-    sequence_length = 1000  # Number of time steps to look back
+    sequence_length = 12000  # Number of time steps to look back
     X_train, y_train = [], []
     for i in range(len(scaled_train) - sequence_length):
         X_train.append(scaled_train[i:i+sequence_length])
@@ -80,7 +80,7 @@ def model_func():
     
     
     # Create sequences and labels for testing data
-    sequence_length = 200  # Number of time steps to look back
+    sequence_length = 2000  # Number of time steps to look back
     X_test, y_test = [], []
     for i in range(len(scaled_test) - sequence_length):
         X_test.append(scaled_test[i:i+sequence_length])
@@ -136,7 +136,7 @@ def model_func():
     test_dataset = torch.utils.data.TensorDataset(X_test, y_test)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     
-    num_epochs = 10
+    num_epochs = 30
     train_hist =[]
     test_hist =[]
     # Training loop
@@ -254,15 +254,15 @@ def model_func():
     fig, ax = plt.subplots(figsize=(15,5))
     # train_data['value'].plot(ax=ax, label='Train Set')
     # test_data['value'].plot(ax=ax, label='Test Set')
-    plt.plot(train_data)
-    plt.plot(test_data)
+    plt.plot(train_data, label='train data')
+    plt.plot(test_data, label='test data')
     #predictions.plot(ax=ax, label='predictions')
-    plt.plot(test_data.index, forecasted_cases)
+    plt.plot(test_data.index, forecasted_cases, label='forecasted')
     #forecasted_cases.plot(ax=ax, label='Prediction Set')
     plt.plot([])
     plt.xlabel('number')
     plt.ylabel('bitrate')
-    ax.legend()
+    plt.legend()
     plt.show()
     
     #blad
