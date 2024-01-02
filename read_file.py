@@ -9,19 +9,20 @@ def read_from_file():
     file1 = open("data/1.txt")
     
     format = file1.readline()
-    print(format)
+    #print(format)
     
     node_origin = file1.readline()
-    print(node_origin)
+    #print(node_origin)
     
     node_destination = file1.readline()
-    print(node_destination)
+    #print(node_destination)
     
     #odczyt wartosci bitrate 
     for line in file1:
         measurements.append(line.rstrip())
-    #jesli chcemy tylko okreslona liczbe
-    #for i in range(1000):
+    
+    # #jesli chcemy tylko okreslona liczbe
+    # for i in range(2000):
     #    line = next(file1).strip()
     #    measurements.append(line)
         
@@ -34,7 +35,7 @@ def read_from_file():
     file1.close()
     
     #pokazanie wykresiku
-    plt.plot(measurements)
-    plt.xlabel('number')
-    plt.ylabel('bitrate')
-    plt.show()
+    # plt.plot(measurements)
+    # plt.xlabel('number')
+    # plt.ylabel('bitrate')
+    # plt.show()
