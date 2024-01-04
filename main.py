@@ -1,5 +1,5 @@
 from read_file import *
-from model import *
+from old_model import *
 
 read_from_file()
 model_func()

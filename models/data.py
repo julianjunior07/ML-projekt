@@ -6,7 +6,7 @@ import math
 #   data - macież, której indeksy to wierzchołki sieci np data[4][5] oznacza dane transwerowe z wierzchołka 4 do 5
 #   list_of_data dane zapisane w liście w kolejności czytania plików (pewnie alfabetycznie)
 class Data:
-    data_path = 'D:\Seba\Studia\Semestr2\ML\Praktyka i testy\praktyka\data'
+    data_path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
     count = 0
     data = []
     list_of_data = []

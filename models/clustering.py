@@ -12,7 +12,6 @@ from somclustering import SOMClustering
 from data import Data
 
 
-
 class Clustering:
 
     def __init__(self, path):
@@ -40,11 +39,6 @@ class Clustering:
 
 
 #przykład uzycia klastrów
-path = 'D:\Seba\Studia\Semestr2\ML\dataset1'
-cluster = Clustering(path)
+path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
 
-somclusters = cluster.getSomCluster()
-somclusters.train(0.3, 0.5)
-somclusters.plot_som_series_averaged_center()
-clusters_avg_lists = somclusters.get_clusters_average()
 

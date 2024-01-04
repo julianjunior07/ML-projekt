@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from read_file import *
+#from read_file import *
 
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
@@ -26,10 +26,20 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 
-def model_func():
-    #przerobienie listy na dataframe pandas
-    dict = {'value': measurements}
-    df = pd.DataFrame(dict)
+from clustering import Clustering
+
+path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+
+def model_funcion():
+    
+    cluster = Clustering(path)
+    print(cluster.data_list[0])
+    somclusters = cluster.getSomCluster()
+    somclusters.train(0.3, 0.5)
+    somclusters.plot_som_series_averaged_center()
+    clusters_avg_lists = somclusters.get_clusters_average()
+    
+    df = pd.DataFrame({'value': clusters_avg_lists[0]})
     
     #podział danych na treningowe i testowe
     ratio = 0.85
@@ -272,7 +282,7 @@ def model_func():
     )
     print(f"test error mse: {error_mse}")
     
-
+model_funcion()
 
 
 
