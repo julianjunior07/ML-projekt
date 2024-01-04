@@ -1,0 +1,28 @@
+from torch import nn as nn
+
+class Autoencoder(nn.model):
+    def __init__(self):
+        super().__init__()
+        
+        
+    def forward():
+        pass
+
+class Encoder(nn.Model):
+    
+    def __init__(self):
+        super().__init__()
+        
+        
+    def forward():
+        pass
+    
+    
+class Decoder(nn.Model):
+    
+    def __init__(self):
+        super().__init__()
+        
+        
+    def forward():
+        pass

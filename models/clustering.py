@@ -27,23 +27,24 @@ class Clustering:
     #scaling data
      
     def nomalize_data(self):
-        plt.plot(self.data_list[0])
-        plt.show()
         for i in range(len(self.data_list)):
             x_min = self.data_list[i].min()
             x_max = self.data_list[i].max()
             for x in range(len(self.data_list[i])):
                 self.data_list[i][x] = (self.data_list[i][x]-x_min) / (x_max - x_min)
-        plt.plot(self.data_list[0])
-        plt.show()
+        
         
     def getSomCluster(self):
         return SOMClustering(self.data_list)
     
-    
+
+
+#przykład uzycia klastrów
 path = 'D:\Seba\Studia\Semestr2\ML\dataset1'
 cluster = Clustering(path)
 
 somclusters = cluster.getSomCluster()
-somclusters.train(0.4, 0.5)
+somclusters.train(0.3, 0.5)
 somclusters.plot_som_series_averaged_center()
+clusters_avg_lists = somclusters.get_clusters_average()
+

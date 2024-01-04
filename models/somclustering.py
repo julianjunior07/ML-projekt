@@ -18,15 +18,17 @@ class SOMClustering():
         
     def plot_som_series_averaged_center(self):
         win_map = self.som.win_map(self.data_series)
+        fig, axs = plt.subplots(self.som_x, self.som_y,figsize=(25,25))
+        fig.suptitle('Clusters')
         for x in range(self.som_x):
             for y in range(self.som_y):
                 cluster = (x,y)
                 if cluster in win_map.keys():
                     for series in win_map[cluster]:
-                        plt.plot(series,c="gray",alpha=0.5) 
-                    plt.plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
+                        axs[cluster].plot(series,c="gray",alpha=0.5) 
+                    axs[cluster].plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
                 cluster_number = x*self.som_y+y+1
-                plt.figure(f"Cluster {cluster_number}")
+                axs[cluster].set_title(f"Cluster {cluster_number}")
         plt.show()
         
     def plot_som_series_dba_center(self):
@@ -42,6 +44,27 @@ class SOMClustering():
                 plt.figure(f"Cluster {cluster_number}")
         plt.show()
         
+    def get_clusters_average(self):
+        win_map = self.som.win_map(self.data_series)
+        cluster_average = []
+        for x in range(self.som_x):
+            for y in range(self.som_y):
+                cluster = (x,y)
+                if cluster in win_map.keys():
+                    cluster_average.append(np.average(np.vstack(win_map[cluster]),axis=0))
+        return cluster_average
+        
+    def get_clusters_dba(self):
+        win_map = self.som.win_map(self.data_series)
+        cluster_average = []
+        for x in range(self.som_x):
+            for y in range(self.som_y):
+                cluster = (x,y)
+                if cluster in win_map.keys():
+                    cluster_average.append(np.average(dtw_barycenter_averaging(np.vstack(win_map[cluster]), axis=0)))
+        return cluster_average
+    
+    
     
     def get_win_map(self):
         return self.som.win_map(self.data_series)
