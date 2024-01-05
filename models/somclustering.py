@@ -29,7 +29,9 @@ class SOMClustering():
                     axs[cluster].plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
                 cluster_number = x*self.som_y+y+1
                 axs[cluster].set_title(f"Cluster {cluster_number}")
-        plt.show()
+        #plt.show()
+        plt.savefig('Figure_1.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
+        plt.close()
         
     def plot_som_series_dba_center(self):
         win_map = self.som.win_map(self.data_series)
