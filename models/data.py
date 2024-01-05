@@ -40,7 +40,7 @@ class Data(Dataset):
                     data = f.readlines()
                     
                 #map data from strings to floats
-                data = list(map(float, data))
+                data = np.array(list(map(float, data)))
                 #self.data[start_node][end_node] = data
                 self.list_of_data.append(data)
                 self.dataset[(start_node, end_node)] = data
