@@ -22,8 +22,7 @@ class Clustering:
         
     def init_data(self):
         self.data = Data(self.path_to_data)
-        self.dataset = self.data.data
-        self.data_list = np.array(self.data.list_of_data)
+        self.data_list = np.array(self.data.get_list_of_data())
     #scaling data
      
     def nomalize_data(self):
@@ -39,12 +38,5 @@ class Clustering:
     
 
 
-#przykład uzycia klastrów
-path = 'D:\Seba\Studia\Semestr2\ML\dataset1'
-cluster = Clustering(path)
 
-somclusters = cluster.getSomCluster()
-somclusters.train(0.3, 0.5)
-somclusters.plot_som_series_averaged_center()
-clusters_avg_lists = somclusters.get_clusters_average()
 

@@ -1,28 +1,105 @@
-from torch import nn as nn
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+import matplotlib.pyplot as plt
+from data import Data
+class Encoder(nn.Module):
+    def __init__(self, input_size, hidden_size, latent_size, num_layers):
+        super(Encoder, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers=num_layers, batch_first=True)
+        self.latent_size = latent_size
 
-class Autoencoder(nn.model):
-    def __init__(self):
-        super().__init__()
-        
-        
-    def forward():
-        pass
+    def forward(self, x):
+        _, (hidden, _) = self.lstm(x)
+        encoded = hidden.view(-1, self.latent_size)
+        return encoded
 
-class Encoder(nn.Model):
-    
-    def __init__(self):
-        super().__init__()
-        
-        
-    def forward():
-        pass
-    
-    
-class Decoder(nn.Model):
-    
-    def __init__(self):
-        super().__init__()
-        
-        
-    def forward():
-        pass
+class Decoder(nn.Module):
+    def __init__(self, latent_size, hidden_size, output_size, num_layers):
+        super(Decoder, self).__init__()
+        self.lstm = nn.LSTM(latent_size, hidden_size, num_layers=num_layers, batch_first=True)
+        self.output_layer = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        x = x.view(x.size(0), 1, -1)
+        _, (hidden, _) = self.lstm(x)
+        decoded = self.output_layer(hidden.view(x.size(0), -1))
+        return decoded
+
+class LSTMAutoencoder(nn.Module):
+    def __init__(self, input_size, hidden_size, latent_size, num_layers=2):
+        super(LSTMAutoencoder, self).__init__()
+        self.encoder = Encoder(input_size, hidden_size, latent_size, num_layers)
+        self.decoder = Decoder(latent_size, hidden_size, input_size, num_layers)
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded
+
+def train_model(model, train_loader, num_epochs=10, learning_rate=0.001):
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+    for epoch in range(num_epochs):
+        total_loss = 0.0
+        for inputs in train_loader:
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, inputs)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+        print(f'Epoch {epoch+1}/{num_epochs}, Loss: {total_loss/len(train_loader)}')
+
+def detect_anomalies(model, test_loader, threshold):
+    model.eval()
+    anomalies = []
+    with torch.no_grad():
+        for data in test_loader:
+            inputs, _ = data
+            outputs = model(inputs)
+            mse = nn.MSELoss(reduction='none')(outputs, inputs).mean(dim=(1, 2))
+            anomalies.extend(mse > threshold)
+
+    return anomalies
+
+# Przykładowe użycie
+# Załóżmy, że X_train i X_test to dane treningowe i testowe, odpowiednio.
+# Tworzymy DataLoader'y, aby łatwiej zarządzać danymi w PyTorch.
+
+#przykład uzycia klastrów
+path = 'D:\Seba\Studia\Semestr2\ML\dataset1'
+data = Data(path)
+
+sequence_length = 10
+input_dim = 20
+hidden_size = 16
+latent_dim = 10
+num_layers = 2  # liczba warstw LSTM
+
+X_train, X_test = data.get_train_and_test_data_normalized(80, 0)
+X_train = np.array(X_train)
+X_test = np.array(X_test)
+
+train_dataset = TensorDataset(torch.tensor(X_train, dtype=torch.float32))
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+
+test_dataset = TensorDataset(torch.tensor(X_test, dtype=torch.float32))
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+# Inicjalizacja modelu
+model = LSTMAutoencoder(input_size=input_dim, hidden_size=hidden_size, latent_size=latent_dim, num_layers=num_layers)
+
+# Trening modelu
+train_model(model, train_loader, num_epochs=10, learning_rate=0.001)
+
+# Detekcja anomalii
+threshold = 0.04  # Przykładowy próg, dostosuj go do swojego przypadku
+anomalies = detect_anomalies(model, test_loader, threshold)
+
+# Wyświetlenie wyników
+print("Anomaly mask:", anomalies)
