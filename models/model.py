@@ -28,7 +28,13 @@ from torch.utils.data import Dataset, DataLoader
 
 from clustering import Clustering
 
-path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+# dla danych us26
+path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
+path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
+
+#dla danych int9
+# path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
 
 def model_funcion():
     
@@ -42,7 +48,7 @@ def model_funcion():
     somclusters.plot_som_series_averaged_center()
     print("uzyskanie listy z wartościami średnich")
     clusters_avg_lists = somclusters.get_clusters_average()
-    print("liczba uzyskanych klastrów" + str(len(clusters_avg_lists)))
+    print("liczba uzyskanych klastrów " + str(len(clusters_avg_lists)))
     
     df = []
     
@@ -240,7 +246,8 @@ def model_funcion():
         plt.xlabel('number')
         plt.ylabel('bitrate')
         plt.legend()
-        plt.savefig("Cluster_"+str(z+1)+".png")
+        plt.tight_layout()
+        plt.savefig(path_figures+'\Cluster_'+str(cluster_number)+'.png')
         plt.close()
         # plt.show()
         
@@ -249,8 +256,8 @@ def model_funcion():
             y_true= test_data['value'],
             y_pred= forecasted_cases
         )
-        #print("CLuster number: " + cluster_nr) #cluster_nr wziac z petli do robienia modelu dla kazdego klastra
-        print("Klaster nr" + z+1 + "wyswietlanie bledu MSE")
+
+        print("Klaster nr " + str(cluster_number) + " wyswietlanie bledu MSE")
         print(f"test error mse: {error_mse}")
  
 model_funcion()
