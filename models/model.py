@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_absolute_percentage_error
 
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from skforecast.ForecasterAutoregCustom import ForecasterAutoregCustom
@@ -18,6 +19,7 @@ from skforecast.model_selection import grid_search_forecaster
 from skforecast.model_selection import backtesting_forecaster
 from skforecast.utils import save_forecaster
 from skforecast.utils import load_forecaster
+
 
 from sklearn.preprocessing import MinMaxScaler
 import torch # Library for implementing Deep Neural Network 
@@ -29,17 +31,17 @@ from torch.utils.data import Dataset, DataLoader
 from clustering import Clustering
 
 # dla danych us26
-path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
-path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
+# path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
+# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
 
 #dla danych int9
-# path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
-# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
 
 def model_funcion():
     
     cluster = Clustering(path)
-    print(cluster.data_list[0])
+    # print(cluster.data_list[0])
     print("inicjalizacja algorytmu klastrów")
     somclusters = cluster.getSomCluster()
     print("trenowanie algorytmu klastrów")
@@ -80,7 +82,7 @@ def model_funcion():
         scaled_train = scaler.fit_transform(train_data)
         
         print("wyswietlanie znormalizowanych treningowych wartosci")
-        print(scaled_train[:train_size])
+        print(*scaled_train[:5])
         
         scaled_test = scaler.fit_transform(test_data)
         print("wyswietlanie znormalizowanych testowych wartosci")
@@ -252,13 +254,22 @@ def model_funcion():
         # plt.show()
         
         #blad
-        error_mse = mean_squared_error(
-            y_true= test_data['value'],
-            y_pred= forecasted_cases
+        # error_mse = mean_squared_error(
+        #     y_true= test_data['value'],
+        #     y_pred= forecasted_cases
+        # )
+        error_mape = mean_absolute_percentage_error(
+            y_true=test_data['value'],
+            y_pred=forecasted_cases
         )
 
         print("Klaster nr " + str(cluster_number) + " wyswietlanie bledu MSE")
-        print(f"test error mse: {error_mse}")
+        print(f"test error mse: {error_mape*100}%")
+        
+        #zapis wartosci bledu do pliku
+        file_errors = open(path_figures+"\error_values_"+str(len(clusters_avg_lists))+".txt", "a")
+        file_errors.write("MAPE klaster nr "+str(cluster_number)+ ": " +str(error_mape*100)+"% \n")
+        file_errors.close()
  
 model_funcion()
 

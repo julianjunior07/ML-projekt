@@ -6,9 +6,9 @@ from tslearn.barycenters import dtw_barycenter_averaging
 from minisom import MiniSom
 
 # dla danych us26
-path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
+# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
 # dla danych int9
-# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
   
 class SOMClustering(): 
     
@@ -35,7 +35,8 @@ class SOMClustering():
                 cluster_number = x*self.som_y+y+1
                 axs[cluster].set_title(f"Cluster {cluster_number}")
         #plt.show()
-        plt.savefig(path_figures+'\All_Clusters_26.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
+        # plt.savefig(path_figures+'\All_Clusters_26.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
+        plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
         plt.close()
         
     def plot_som_series_dba_center(self):
