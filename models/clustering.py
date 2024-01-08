@@ -21,8 +21,7 @@ class Clustering:
         
     def init_data(self):
         self.data = Data(self.path_to_data)
-        self.dataset = self.data.data
-        self.data_list = np.array(self.data.list_of_data)
+        self.data_list = np.array(self.data.get_list_of_data())
     #scaling data
      
     def nomalize_data(self):
@@ -43,4 +42,5 @@ class Clustering:
 # path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
 # dla danych int9
 path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+
 
