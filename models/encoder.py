@@ -103,55 +103,76 @@ for file in os.scandir(dir_path):
 som = SOMClustering(dataset)
 som.train()
 clusters_map = som.get_clusters_map()
-#som.plot_som_series_averaged_center()
+som.plot_som_series_averaged_center()
 
 DRYFT_PLACEMENT=3/4
 
 
 def train_model(model, train_dataset, val_dataset, n_epochs):
-  optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+  optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
   criterion = nn.L1Loss(reduction='sum').to(device)
-  #criterion = nn.MSELoss()
-  
+  criterion = nn.MSELoss().to(device)
   history = dict(train=[], val=[])
+
   best_model_wts = copy.deepcopy(model.state_dict())
   best_loss = 10000.0
   
-  for epoch in range(n_epochs):
+  for epoch in range(1, n_epochs + 1):
     model = model.train()
-    train_losses = []
     total_loss = 0.0
-    for sequence in train_dataset:
+    train_losses = []
+    for seq_true in train_dataset:
       optimizer.zero_grad()
-      sequence = sequence.to(device)
-      prediction = model(sequence)
-      loss = criterion(prediction, sequence)
+
+      seq_true = seq_true.to(device)
+      seq_pred = model(seq_true)
+
+      loss = criterion(seq_pred, seq_true)
+
       loss.backward()
       optimizer.step()
-      total_loss += loss.item()
+
       train_losses.append(loss.item())
-    
-    val_losses = []
-    model = model.eval()
+      total_loss += loss.item()
+    # val_losses = []
+    # model = model.eval()
+    # with torch.no_grad():
+    #   for seq_true in val_dataset:
+
+    #     seq_true = seq_true.to(device)
+    #     seq_pred = model(seq_true)
+
+    #     loss = criterion(seq_pred, seq_true)
+    #     val_losses.append(loss.item())
+
+    # train_loss = np.mean(train_losses)
+    # val_loss = np.mean(val_losses)
+
+    # history['train'].append(train_loss)
+    # history['val'].append(val_loss)
+
+    # if val_loss < best_loss:
+    #   best_loss = val_loss
+    #   best_model_wts = copy.deepcopy(model.state_dict())
+
+    #print(f'Epoch {epoch}: train loss {train_loss} val loss {val_loss}')
+    print(f'Epoch {epoch}/{n_epochs}, Loss: {total_loss/len(train_dataset)}')
+  # model.load_state_dict(best_model_wts)
+  return model.eval()
+
+def detect_anomalies(model, test_dataset, threshold):
+    model.eval()
+    anomalies = []
     with torch.no_grad():
-      for sequence in val_dataset:
-        sequence = sequence.to(device)
-        prediction = model(sequence)
-        loss = criterion(prediction, sequence)
-        val_losses.append(loss.item())
-    train_loss = np.mean(train_losses)
-    val_loss = np.mean(val_losses)
-    history['train'].append(train_loss)
-    history['val'].append(val_loss)
-    if val_loss < best_loss:
-      best_loss = val_loss
-      best_model_wts = copy.deepcopy(model.state_dict())
-    
-    print(f'Epoch: {epoch}, loss: {total_loss}')
-    model.load_state_dict(best_model_wts)
-  return model.eval(), history
+        for sequence in test_dataset:
+            sequence = sequence.to(device)
+            prediction = model(sequence)
+            mse = nn.MSELoss(reduction='none')(prediction, sequence).mean(dim=(1, 2))
+            anomalies.extend(mse > threshold)
 
-
+    return anomalies
+  
+  
 #funkcja pomocnicza do orabiania danych
 def create_dataset(sequences):
   sequences = np.array(sequences).astype(np.float32)
@@ -160,6 +181,8 @@ def create_dataset(sequences):
   return dataset, seq_len, n_features
 
 
+models_cnt = 1
+MODELS_PATH = '..\\trained_models'
 #trenowanie modeli
 for cluster in clusters_map:
   train_dataset = cluster[:math.ceil(len(cluster)*2/3)]
@@ -174,8 +197,9 @@ for cluster in clusters_map:
   #model
   model = LSTMAutoencoder(seq_len, n_features, embedding_dim=128)  
   model.to(device)
-  train_model(model, train_sequences, n_epochs=50)
-  
+  model = train_model(model, train_sequences, train_sequences, n_epochs=150)
+  print("saveing model")
+  torch.save(model, MODELS_PATH+ f'\{models_cnt}')
   # ax = plt.figure().gca()
   # ax.plot(history['train'])
   # ax.plot(history['val'])
