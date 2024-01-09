@@ -38,7 +38,10 @@ from clustering import Clustering
 path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
 path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
 
-def model_funcion():
+path_to_model = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9\models'
+# nie dziala zapis xD
+
+def model_function():
     
     cluster = Clustering(path)
     # print(cluster.data_list[0])
@@ -55,8 +58,10 @@ def model_funcion():
     df = []
     
     for z in range(len(clusters_avg_lists)): #petla wykonuje sie dla kazdego klastra, liczba pobrana z liczby uzyskanych klastrów
-    
+        
         df = pd.DataFrame(data={'value': clusters_avg_lists[z]})
+        
+        cluster_number = z+1
     
         #podział danych na treningowe i testowe
         ratio = 0.85
@@ -82,51 +87,52 @@ def model_funcion():
         scaled_train = scaler.fit_transform(train_data)
         
         print("wyswietlanie znormalizowanych treningowych wartosci")
-        print(*scaled_train[:5])
+        print(*scaled_train[:5]) #pierwsze 5 wierszy treningowe
         
         scaled_test = scaler.fit_transform(test_data)
         print("wyswietlanie znormalizowanych testowych wartosci")
-        print(*scaled_test[:5]) #prints the first 5 rows of scaled_test
+        print(*scaled_test[:5]) #pierwsze 5 wierszy testowe
 
-        sequence_length = 11000  # Number of time steps to look back
+        #tworzenie danych treningowych
+        sequence_length = 11000  # liczba próbek 
         X_train, y_train = [], []
         for i in range(len(scaled_train) - sequence_length):
             X_train.append(scaled_train[i:i+sequence_length])
             y_train.append(scaled_train[i+1:i+sequence_length+1])
         X_train, y_train = np.array(X_train), np.array(y_train)
     
-        # Convert data to PyTorch tensors
+        # konwersja na tensory pytorch
         X_train = torch.tensor(X_train, dtype=torch.float32)
         y_train = torch.tensor(y_train, dtype=torch.float32)
         print("wyswietlanie rozmiaru danych w formie torch.tensor")
         print(X_train.shape,y_train.shape)
         
         
-        # Create sequences and labels for testing data
-        sequence_length = 2050  # Number of time steps to look back
+        #tworzenie danych testowych
+        sequence_length = 2050  # liczba próbek 
         X_test, y_test = [], []
         for i in range(len(scaled_test) - sequence_length):
             X_test.append(scaled_test[i:i+sequence_length])
             y_test.append(scaled_test[i+1:i+sequence_length+1])
         X_test, y_test = np.array(X_test), np.array(y_test)
         
-        # Convert data to PyTorch tensors
+        # konwersja na tensory pytorch
         X_test = torch.tensor(X_test, dtype=torch.float32)
         y_test = torch.tensor(y_test, dtype=torch.float32)
         X_test.shape, y_test.shape
 
         
         
-        class LSTMModel(nn.Module):
-            # input_size : number of features in input at each time step
-            # hidden_size : Number of LSTM units 
-            # num_layers : number of LSTM layers 
+        class LSTMModel_a(nn.Module):
+            # input_size : liczba danych wejsciowych jednoczesnie
+            # hidden_size : liczba jednostek LSTM 
+            # num_layers : liczba warstw LSTM 
             def __init__(self, input_size, hidden_size, num_layers): 
-                super(LSTMModel, self).__init__() #initializes the parent class nn.Module
+                super(LSTMModel_a, self).__init__() #inicjalizuje klasę rodzica nn.Module
                 self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
                 self.linear = nn.Linear(hidden_size, 1)
         
-            def forward(self, x): # defines forward pass of the neural network
+            def forward(self, x): # przejscie w przod sieci neuronowej
                 out, _ = self.lstm(x)
                 out = self.linear(out)
                 return out
@@ -141,22 +147,24 @@ def model_funcion():
         hidden_size = 64
         output_size = 1
         
-        # Define the model, loss function, and optimizer
-        model = LSTMModel(input_size, hidden_size, num_layers).to(device)
-        
+        #definiowanie modelu, funkcji błędu dla epoch i optymalizacji 
+        model = LSTMModel_a(input_size, hidden_size, num_layers).to(device)
+        # wczytanie modelu dla klastra
+        # model = torch.load(path_to_model+'model_klaster_'+str(cluster_number)+'.pth')
+        # model.eval()
         loss_fn = torch.nn.MSELoss(reduction='mean')
-        
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+        
         print("wyswietlanie modelu")
         print(model)
 
         
         batch_size = 16
-        # Create DataLoader for batch training
+        #dataloader dla danych treningowych
         train_dataset = torch.utils.data.TensorDataset(X_train, y_train)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
         
-        # Create DataLoader for batch training
+        #dataloader dla danych testowych
         test_dataset = torch.utils.data.TensorDataset(X_test, y_test)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
         
@@ -165,11 +173,11 @@ def model_funcion():
         num_epochs = 30
         train_hist =[]
         test_hist =[]
-        # Training loop
+        # pętla treningowa
         for epoch in range(num_epochs):
             total_loss = 0.0
 
-            # Training
+            # trenowanie
             model.train()
             for batch_X, batch_y in train_loader:
                 batch_X, batch_y = batch_X.to(device), batch_y.to(device)
@@ -182,11 +190,11 @@ def model_funcion():
 
                 total_loss += loss.item()
 
-            # Calculate average training loss and accuracy
+            #obliczenie sredniego bledu dla treningu
             average_loss = total_loss / len(train_loader)
             train_hist.append(average_loss)
 
-            # Validation on test data
+            #sprawdzenie poprawnosci danych testowych
             model.eval()
             with torch.no_grad():
                 total_test_loss = 0.0
@@ -198,16 +206,16 @@ def model_funcion():
 
                     total_test_loss += test_loss.item()
 
-                # Calculate average test loss and accuracy
+                #sredni blad
                 average_test_loss = total_test_loss / len(test_loader)
                 test_hist.append(average_test_loss)
             if (epoch+1)%10==0:
                 print(f'Epoch [{epoch+1}/{num_epochs}] - Training Loss: {average_loss:.7f}, Test Loss: {average_test_loss:.7f}')
 
-        # Define the number of future time steps to forecast
+        #ile probek ma przewidziec model
         num_forecast_steps = len(test_data)
 
-        # Convert to NumPy and remove singleton dimensions
+        #konwersja na numpy
         sequence_to_plot = X_test.squeeze().cpu().numpy()
 
         # Use the last 30 data points as the starting point
@@ -215,35 +223,35 @@ def model_funcion():
         print("wyswietlanie rozmiaru danych historycznych")
         print(historical_data.shape)
 
-        # Initialize a list to store the forecasted values
+        #lista z predykcjami
         forecasted_values = []
 
-        # Use the trained model to forecast future values
+        #predykcja wartosci przez model
         with torch.no_grad():
             for _ in range(num_forecast_steps):
-                # Prepare the historical_data tensor
+                #przygotowanie tensora dla danych przeszlych
                 historical_data_tensor = torch.as_tensor(historical_data).view(1, -1, 1).float().to(device)
-                # Use the model to predict the next value
+                #uzycie modelu do przewidzenia nastepnej wartosci
                 predicted_value = model(historical_data_tensor).cpu().numpy()[0, 0]
 
-                # Append the predicted value to the forecasted_values list
+                #dodanie przewidzanej wartosci do listy
                 forecasted_values.append(predicted_value[0])
 
-                # Update the historical_data sequence by removing the oldest value and adding the predicted value
+                # Update the historical_data sequence by removing the oldest value and adding the predicted value 
                 historical_data = np.roll(historical_data, shift=-1)
                 historical_data[-1] = predicted_value
+                
 
-        
+        # przeskalowanie wartosci przewidzianych
         forecasted_cases = scaler.inverse_transform(np.expand_dims(forecasted_values, axis=0)).flatten() 
         
+        # rysowanie wykresu
         fig, ax = plt.subplots(figsize=(15,5))
-        # train_data['value'].plot(ax=ax, label='Train Set')
-        # test_data['value'].plot(ax=ax, label='Test Set')
         plt.plot(train_data, label='train data')
         plt.plot(test_data, label='test data')
         plt.plot(test_data.index, forecasted_cases, label='forecasted')
         plt.plot([])
-        cluster_number = z+1
+        # cluster_number = z+1
         plt.suptitle(f"Cluster {cluster_number}")
         plt.xlabel('number')
         plt.ylabel('bitrate')
@@ -252,6 +260,9 @@ def model_funcion():
         plt.savefig(path_figures+'\Cluster_'+str(cluster_number)+'.png')
         plt.close()
         # plt.show()
+        
+         # zapis modelu dla jedego klastra
+        # torch.save(model, path_to_model+'model_klaster_'+str(cluster_number)+'.pth')
         
         #blad
         # error_mse = mean_squared_error(
@@ -271,7 +282,7 @@ def model_funcion():
         file_errors.write("MAPE klaster nr "+str(cluster_number)+ ": " +str(error_mape*100)+"% \n")
         file_errors.close()
  
-model_funcion()
+model_function()
 
 
 
