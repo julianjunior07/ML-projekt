@@ -6,6 +6,8 @@ import pandas as pd
 import sklearn.model_selection
 import os
 import matplotlib.pyplot as plt
+from somclustering import SOMClustering
+import math
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -69,9 +71,6 @@ class Decoder(nn.Module):
     return self.output_layer(x)
 
 
-
-
-
 class LSTMAutoencoder(nn.Module):
   def __init__(self, seq_len, n_features, embedding_dim=64):
     super(LSTMAutoencoder, self).__init__()
@@ -88,55 +87,27 @@ class LSTMAutoencoder(nn.Module):
 # na razie leci prowizorka nauki z jednego przepływu danych
 dir_path = '..\data\pattern_swap\change_three_quarters'
 dataset = []
-before_dryft_dataset = []
-test_dataset = []
-ds_anomaly = []
+# before_dryft_dataset = []
+# test_dataset = []
+# ds_anomaly = []
 for file in os.scandir(dir_path):
     with open(file) as file:
         data = file.readlines()
         
     data = np.array(list(map(float, data)))
     dataset.append(data)
-    before_dryft_dataset.append(data[:3*int(len(data)/4)]) # dryft koncepcji w 3/4 przebiegu
-    ds_anomaly.append(data[3*int(len(data)/4):])
-
-# plt.subplot(1,2,1)
-# plt.plot(dataset[0])
-# plt.subplot(1,2,2)
-# plt.plot(dataset[1])
-# plt.show()
+    # before_dryft_dataset.append(data[:3*int(len(data)/4)]) # dryft koncepcji w 3/4 przebiegu
+    # ds_anomaly.append(data[3*int(len(data)/4):])
 
 
-ds_train, ds_validate, ds_test = [], [], []
-for i in range(len(before_dryft_dataset)):
-    x, y = sklearn.model_selection.train_test_split(before_dryft_dataset[i], test_size=0.4)
-    a, b = sklearn.model_selection.train_test_split(y, test_size=0.5)
-    ds_train.append(x)
-    ds_validate.append(a)
-    ds_test.append(b)
-    
-train_sequence = np.array(ds_train)
-validation_sequence = np.array(ds_validate)
-test_sequence = np.array(ds_test)
-anomaly_sequence = np.array(ds_anomaly)
+som = SOMClustering(dataset)
+som.train()
+clusters_map = som.get_clusters_map()
+#som.plot_som_series_averaged_center()
+
+DRYFT_PLACEMENT=3/4
 
 
-def create_dataset(sequence):
-    dataset = [torch.tensor(s).unsqueeze(1) for s in sequence]
-    n_seq, seq_len, n_features = torch.stack(dataset).shape
-    return dataset, seq_len, n_features
-    
-train_dataset, seq_len, n_features = create_dataset(train_sequence)
-validation_dataset, _, _ = create_dataset(validation_sequence)
-test_dataset, _, _ = create_dataset(test_sequence)
-test_anomaly_dataset, _, _ = create_dataset(anomaly_sequence)
-
-
-#model
-model = LSTMAutoencoder(seq_len, n_features, embedding_dim=128)
-model.to(device)
-
-#train model
 def train_model(model, train_dataset, val_dataset, n_epochs):
   optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
   criterion = nn.L1Loss(reduction='sum').to(device)
@@ -149,6 +120,7 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
   for epoch in range(n_epochs):
     model = model.train()
     train_losses = []
+    total_loss = 0.0
     for sequence in train_dataset:
       optimizer.zero_grad()
       sequence = sequence.to(device)
@@ -156,6 +128,7 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
       loss = criterion(prediction, sequence)
       loss.backward()
       optimizer.step()
+      total_loss += loss.item()
       train_losses.append(loss.item())
     
     val_losses = []
@@ -174,7 +147,42 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
       best_loss = val_loss
       best_model_wts = copy.deepcopy(model.state_dict())
     
-    print(f'Epoch {epoch}: train loss {train_loss} val loss {val_loss}')
-  model.load_state_dict(best_model_wts)
+    print(f'Epoch: {epoch}, loss: {total_loss}')
+    model.load_state_dict(best_model_wts)
   return model.eval(), history
 
+
+#funkcja pomocnicza do orabiania danych
+def create_dataset(sequences):
+  sequences = np.array(sequences).astype(np.float32)
+  dataset = [torch.tensor(s).unsqueeze(1) for s in sequences]
+  _, seq_len, n_features = torch.stack(dataset).shape
+  return dataset, seq_len, n_features
+
+
+#trenowanie modeli
+for cluster in clusters_map:
+  train_dataset = cluster[:math.ceil(len(cluster)*2/3)]
+  test_dataset =  cluster
+
+  for series in train_dataset:
+    series = series[:int(len(series)*DRYFT_PLACEMENT)] #usuwamy dryft z serii do trenowania modelu    
+  
+  train_sequences, seq_len, n_features = create_dataset(train_dataset)
+  test_sequences, _, _ = create_dataset(test_dataset)
+    
+  #model
+  model = LSTMAutoencoder(seq_len, n_features, embedding_dim=128)  
+  model.to(device)
+  train_model(model, train_sequences, n_epochs=50)
+  
+  # ax = plt.figure().gca()
+  # ax.plot(history['train'])
+  # ax.plot(history['val'])
+  # plt.ylabel('Loss')
+  # plt.xlabel('Epoch')
+  # plt.legend(['train', 'test'])
+  # plt.title('Loss over training epochs')
+  # plt.show();
+  
+#train model
