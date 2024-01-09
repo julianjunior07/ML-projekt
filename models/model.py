@@ -1,25 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 #from read_file import *
 
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Lasso
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import mean_absolute_error
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_percentage_error
-
-from skforecast.ForecasterAutoreg import ForecasterAutoreg
-from skforecast.ForecasterAutoregCustom import ForecasterAutoregCustom
-from skforecast.ForecasterAutoregDirect import ForecasterAutoregDirect
-from skforecast.model_selection import grid_search_forecaster
-from skforecast.model_selection import backtesting_forecaster
-from skforecast.utils import save_forecaster
-from skforecast.utils import load_forecaster
-
 
 from sklearn.preprocessing import MinMaxScaler
 import torch # Library for implementing Deep Neural Network 
@@ -265,10 +249,6 @@ def model_function():
         # torch.save(model, path_to_model+'model_klaster_'+str(cluster_number)+'.pth')
         
         #blad
-        # error_mse = mean_squared_error(
-        #     y_true= test_data['value'],
-        #     y_pred= forecasted_cases
-        # )
         error_mape = mean_absolute_percentage_error(
             y_true=test_data['value'],
             y_pred=forecasted_cases

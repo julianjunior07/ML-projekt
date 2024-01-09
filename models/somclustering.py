@@ -7,9 +7,13 @@ from minisom import MiniSom
 
 # dla danych us26
 # path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
+
 # dla danych int9
-#path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+
+# dla encoderow
 path_figures = '..\imgs\pattersn_swap\\three_quaters'
+
 class SOMClustering(): 
     
     def __init__(self, data):
@@ -38,7 +42,7 @@ class SOMClustering():
         # 
         # plt.savefig(path_figures+'\All_Clusters_26.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
         plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
-        plt.show()
+        # plt.show()
         plt.close()
         
     def plot_som_series_dba_center(self):
