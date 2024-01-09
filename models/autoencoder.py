@@ -52,9 +52,8 @@ def detect_anomalies(model, test_loader, threshold):
 
 
 data = Data()
-sequence_length = 10
-input_dim = int(len(data.list_of_data[0]))
 
+input_dim = int(len(data.list_of_data[0]))
 latent_dim = int(len(data.list_of_data[0])/8)
 
 

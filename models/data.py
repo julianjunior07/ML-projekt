@@ -5,26 +5,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 #klasa zczytująca dane ze wszystkich plików z podanego folderu
 #przed uruchomieniem zmień ściezke
-# ma 2 pola z danymi: 
+# ma 3 pola z danymi: 
 #   data - macież, której indeksy to wierzchołki sieci np data[4][5] oznacza dane transwerowe z wierzchołka 4 do 5
 #   list_of_data dane zapisane w liście w kolejności czytania plików (pewnie alfabetycznie)
+#   dataset dane w postaci słownika, kluczem są node'y startowy i docelowy.
+#       dane dla transmisji z node'a 4 do node'a 8 można pobrać za pomocą dataset[4,8]
 class Data(Dataset):
-    count = 0
     data = []
     list_of_data = []
     dataset = {}
     normalized_data_list = []
     def __init__(self, data_path='D:\Seba\Studia\Semestr2\ML\dataset1'):
-        # self.data = []
-        # self.list_of_data = []
-        # self.dataset = {}
+        self.data = []
+        self.list_of_data = []
+        self.dataset = {}
         # self.data_path = data_path
         # for path in os.listdir(self.data_path):
         #     # check if current path is a file
         #     file_name = os.path.join(self.data_path, path)
         #     if os.path.isfile(file_name):
         #         self.count += 1
-         
         # self.data = [[ [] for i in range(self.count)] for j in range(self.count)]       
         
         for file in os.scandir(data_path):
@@ -102,3 +102,4 @@ class Data(Dataset):
         train_data = self.normalized_data_list[index][:math.ceil(len(self.normalized_data_list[0])/percent)]
         test_data = self.normalized_data_list[index][math.floor(len(self.normalized_data_list)/percent):]
         return train_data, test_data
+    

@@ -14,6 +14,7 @@ class SOMClustering():
     
     def __init__(self, data):
         self.data_series = data
+
         
     def train(self, sigma=0.3, learning_rate=0.5):
         self.som_x = self.som_y = math.ceil(math.sqrt(math.sqrt(len(self.data_series))))
@@ -34,9 +35,9 @@ class SOMClustering():
                     axs[cluster].plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
                 cluster_number = x*self.som_y+y+1
                 axs[cluster].set_title(f"Cluster {cluster_number}")
-        #plt.show()
-        # plt.savefig(path_figures+'\All_Clusters_26.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
-        plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
+        plt.show()
+        plt.savefig('D:\Seba\Studia\Semestr2\ML\Code\imgs\pattersn_swap\\three_quaters\All_clusters.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
+        #plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
         plt.close()
         
     def plot_som_series_dba_center(self):
@@ -76,3 +77,15 @@ class SOMClustering():
     
     def get_win_map(self):
         return self.som.win_map(self.data_series)
+    
+    def get_clusters_map(self):
+        win_map = self.som.win_map(self.data_series)
+        clusters_map = []
+        for x in range(self.som_x):
+            for y in range(self.som_y):
+                cluster = (x,y)
+                if cluster in win_map.keys():
+                    clusters_map.append(win_map[cluster])
+                    
+        return clusters_map
+    
