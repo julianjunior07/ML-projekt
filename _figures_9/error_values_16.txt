@@ -1,0 +1,2 @@
+MAPE klaster nr 1: 66.79497940686966% 
+MAPE klaster nr 2: 57.128934490046305% 
