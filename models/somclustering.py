@@ -35,15 +35,10 @@ class SOMClustering():
                     axs[cluster].plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
                 cluster_number = x*self.som_y+y+1
                 axs[cluster].set_title(f"Cluster {cluster_number}")
-<<<<<<< HEAD
-        plt.show()
-        plt.savefig(path_figures+'\All_Clusters.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
-        #plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
-=======
-        # plt.show()
+        # 
         # plt.savefig(path_figures+'\All_Clusters_26.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
         plt.savefig(path_figures+'\All_Clusters_9.png', bbox_inches='tight') #zamiast wyświetlania to zapis do pliku
->>>>>>> 368a676ccbbb625709fcfd38040353eee7cc7196
+        plt.show()
         plt.close()
         
     def plot_som_series_dba_center(self):
