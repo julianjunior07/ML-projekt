@@ -221,7 +221,7 @@ def model_function():
                 #dodanie przewidzanej wartosci do listy
                 forecasted_values.append(predicted_value[0])
 
-                # Update the historical_data sequence by removing the oldest value and adding the predicted value 
+                #zamiana danych historycznych na przewidziane
                 historical_data = np.roll(historical_data, shift=-1)
                 historical_data[-1] = predicted_value
                 
