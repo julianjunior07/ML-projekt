@@ -7,6 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tslearn.barycenters import dtw_barycenter_averaging
 from tslearn.clustering import TimeSeriesKMeans
 from sklearn.cluster import KMeans
+import torch 
 
 from somclustering import SOMClustering
 from data import Data

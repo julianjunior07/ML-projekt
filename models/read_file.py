@@ -6,7 +6,8 @@ measurements = []
 #odczyt z pliku
 def read_from_file():
     #odczyt formatu danych, node początkowy i końcowy
-    file1 = open("D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students/1.txt")
+    # file1 = open('D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students\1.txt')
+    file1 = open("../data/1.txt")
     
     format = file1.readline()
     #print(format)
@@ -30,12 +31,14 @@ def read_from_file():
     for i in range(0, len(measurements)):
         measurements[i] = float(measurements[i])
         
-    #print(measurements)
+    # print(measurements)
 
     file1.close()
     
-    #pokazanie wykresiku
+    # # pokazanie wykresiku
     # plt.plot(measurements)
     # plt.xlabel('number')
     # plt.ylabel('bitrate')
     # plt.show()
+    
+read_from_file()

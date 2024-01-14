@@ -10,3 +10,13 @@ wyniki działania algorytmu dostępne są w formie graficznej PNG w folderach _f
 aby uruchomić:
 - model predykcji szeregu czasowego, uruchomić plik model.py
 - model autoencoderów do wykrywania anomalii, uruchomić plik encoder.py
+
+Predykcja wartości bitrate robione zarówno dla MAPE i MSE jako loss function w modelu:
+    parametry:
+        ratio = 0.8 #podział danych na treningowe/testowe (80% całego pliku to dane treningowe)
+        liczba próbek: train - 11000, test - 3850
+        liczba epoch: 30
+        input_size = 1
+        num_layers = 2
+        hidden_size = 64
+        batch_size = 16
