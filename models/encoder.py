@@ -101,13 +101,13 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
     model = model.train()
 
     train_losses = []
-    for seq_true in train_dataset:
+    for train_sequence in train_dataset:
       optimizer.zero_grad()
 
-      seq_true = seq_true.to(device)
-      seq_pred = model(seq_true)
+      train_sequence = train_sequence.to(device)
+      output = model(train_sequence)
 
-      loss = criterion(seq_pred, seq_true)
+      loss = criterion(output, train_sequence)
 
       loss.backward()
       optimizer.step()
@@ -117,12 +117,12 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
     val_losses = []
     model = model.eval()
     with torch.no_grad():
-      for seq_true in val_dataset:
+      for train_sequence in val_dataset:
 
-        seq_true = seq_true.to(device)
-        seq_pred = model(seq_true)
+        train_sequence = train_sequence.to(device)
+        output = model(train_sequence)
 
-        loss = criterion(seq_pred, seq_true)
+        loss = criterion(output, train_sequence)
         val_losses.append(loss.item())
 
     train_loss = np.mean(train_losses)

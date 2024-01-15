@@ -59,7 +59,7 @@ for dryft_type in dryft_types:
 
 
         model_cnt = 1
-        MODELS_PATH = '..\\trained_models'
+        MODELS_PATH = '..\\trained_models'+dryft_type+dryft_placement
         #trenowanie modeli
         for cluster in clusters_map:
             train_dataset = []
