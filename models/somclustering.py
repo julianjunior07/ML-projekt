@@ -9,10 +9,10 @@ from minisom import MiniSom
 # path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
 
 # dla danych int9
-path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+#path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
 
 # dla encoderow
-# path_figures = '..\imgs\pattersn_swap\\three_quaters'
+path_figures = '..\imgs\pattern_swap\\change_three_quarters'
 
 class SOMClustering(): 
     

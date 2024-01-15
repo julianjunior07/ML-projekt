@@ -8,9 +8,11 @@ import os
 import matplotlib.pyplot as plt
 from somclustering import SOMClustering
 import math
+from sklearn.preprocessing import MinMaxScaler
+
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
 
 
 class Encoder(nn.Module):
@@ -87,36 +89,9 @@ class LSTMAutoencoder(nn.Module):
     return x
 
 
-#Dane
-#Poklastruj i zbnierz dane w formacie jak poniżej dla każdego kalstra
-# na razie leci prowizorka nauki z jednego przepływu danych
-dir_path = '..\data\pattern_swap\change_three_quarters'
-dataset = []
-# before_dryft_dataset = []
-# test_dataset = []
-# ds_anomaly = []
-for file in os.scandir(dir_path):
-    with open(file) as file:
-        data = file.readlines()
-        
-    data = np.array(list(map(float, data)))
-    dataset.append(data)
-    # before_dryft_dataset.append(data[:3*int(len(data)/4)]) # dryft koncepcji w 3/4 przebiegu
-    # ds_anomaly.append(data[3*int(len(data)/4):])
-
-
-som = SOMClustering(dataset)
-som.train()
-clusters_map = som.get_clusters_map()
-som.plot_som_series_averaged_center()
-
-DRYFT_PLACEMENT=3/4
-
-
 def train_model(model, train_dataset, val_dataset, n_epochs):
-  optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+  optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
   criterion = nn.L1Loss(reduction='sum').to(device)
-  criterion = nn.MSELoss().to(device)
   history = dict(train=[], val=[])
 
   best_model_wts = copy.deepcopy(model.state_dict())
@@ -124,7 +99,7 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
   
   for epoch in range(1, n_epochs + 1):
     model = model.train()
-    total_loss = 0.0
+
     train_losses = []
     for seq_true in train_dataset:
       optimizer.zero_grad()
@@ -138,12 +113,33 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
       optimizer.step()
 
       train_losses.append(loss.item())
-      total_loss += loss.item()
 
-    #print(f'Epoch {epoch}: train loss {train_loss} val loss {val_loss}')
-    print(f'Epoch {epoch}/{n_epochs}, Loss: {total_loss/len(train_dataset)}')
-  # model.load_state_dict(best_model_wts)
-  return model.eval()
+    val_losses = []
+    model = model.eval()
+    with torch.no_grad():
+      for seq_true in val_dataset:
+
+        seq_true = seq_true.to(device)
+        seq_pred = model(seq_true)
+
+        loss = criterion(seq_pred, seq_true)
+        val_losses.append(loss.item())
+
+    train_loss = np.mean(train_losses)
+    val_loss = np.mean(val_losses)
+
+    history['train'].append(train_loss)
+    history['val'].append(val_loss)
+
+    if val_loss < best_loss:
+      best_loss = val_loss
+      best_model_wts = copy.deepcopy(model.state_dict())
+
+    print(f'Epoch {epoch}: train loss {train_loss} val loss {val_loss}')
+
+  model.load_state_dict(best_model_wts)
+  return model.eval(), history
+
 
 def detect_anomalies(model, test_dataset, threshold):
     model.eval()
@@ -156,42 +152,3 @@ def detect_anomalies(model, test_dataset, threshold):
             anomalies.extend(mse > threshold)
 
     return anomalies
-  
-  
-#funkcja pomocnicza do orabiania danych
-def create_dataset(sequences):
-  sequences = np.array(sequences).astype(np.float32)
-  dataset = [torch.tensor(s).unsqueeze(1) for s in sequences]
-  _, seq_len, n_features = torch.stack(dataset).shape
-  return dataset, seq_len, n_features
-
-
-models_cnt = 1
-MODELS_PATH = '..\\trained_models'
-#trenowanie modeli
-for cluster in clusters_map:
-  train_dataset = cluster[:math.ceil(len(cluster)*2/3)]
-  test_dataset =  cluster
-
-  for series in train_dataset:
-    series = series[:int(len(series)*DRYFT_PLACEMENT)] #usuwamy dryft z serii do trenowania modelu    
-  
-  train_sequences, seq_len, n_features = create_dataset(train_dataset)
-  test_sequences, _, _ = create_dataset(test_dataset)
-    
-  #model
-  model = LSTMAutoencoder(seq_len, n_features, embedding_dim=128)  
-  model.to(device)
-  model = train_model(model, train_sequences, train_sequences, n_epochs=100)
-  print("saveing model")
-  torch.save(model, MODELS_PATH+ f'\{models_cnt}')
-  # ax = plt.figure().gca()
-  # ax.plot(history['train'])
-  # ax.plot(history['val'])
-  # plt.ylabel('Loss')
-  # plt.xlabel('Epoch')
-  # plt.legend(['train', 'test'])
-  # plt.title('Loss over training epochs')
-  # plt.show();
-  
-#train model
