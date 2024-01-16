@@ -14,11 +14,11 @@ from encoder import device, train_model
 
 dryft_plcements = [
     "\change_three_quarters",
-    "\change_halfway"
+    # "\change_halfway"
 ]
 dryft_types = [
-    "\\bitrate_fluctuation",
-    "\pattern_swap",
+    # "\\bitrate_fluctuation",
+    # "\pattern_swap",
     "\sum_diff"
 ]
 DRYFT_PLACEMENT=3/4
@@ -100,5 +100,6 @@ for dryft_type in dryft_types:
             plt.title('Loss over training epochs')
             plt.savefig('..\imgs'+dryft_type+dryft_placement+'\model_training_'+ str(model_cnt)+'.png')
             model_cnt+=1
+            plt.close()
         
         #train model
