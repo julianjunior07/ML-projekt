@@ -10,16 +10,18 @@ from somclustering import SOMClustering
 import math
 from sklearn.preprocessing import MinMaxScaler
 from encoder import LSTMAutoencoder
-from encoder import device, train_model
+from encoder import device, train_model, detect_anomalies
+
+
 
 dryft_plcements = [
     "\change_three_quarters",
     # "\change_halfway"
 ]
 dryft_types = [
-    # "\\bitrate_fluctuation",
+    "\\bitrate_fluctuation",
     # "\pattern_swap",
-    "\sum_diff"
+    #"\sum_diff"
 ]
 DRYFT_PLACEMENT=3/4
 
@@ -31,6 +33,13 @@ def create_dataset(sequences):
   dataset = [torch.tensor(s).unsqueeze(1) for s in sequences]
   _, seq_len, n_features = torch.stack(dataset).shape
   return dataset, seq_len, n_features
+
+def normalize_data(dataset):
+    for i in range(len(dataset)):
+        x_min = np.array(dataset)[i].min()
+        x_max = np.array(dataset)[i].max()
+        for x in range(len(dataset[i])):
+            dataset[i][x]=((dataset[i][x]-x_min) / (x_max - x_min))
 
 for dryft_type in dryft_types:
     for dryft_placement in dryft_plcements:
@@ -57,6 +66,7 @@ for dryft_type in dryft_types:
         clusters_map = som.get_clusters_map()
         som.plot_som_series_averaged_center()
 
+        
 
         model_cnt = 1
         MODELS_PATH = '..\\trained_models'+dryft_type+dryft_placement
@@ -65,10 +75,14 @@ for dryft_type in dryft_types:
             train_dataset = []
             test_dataset = []
             validate_dataset = []
-
+            
+            normalize_data(cluster)
+            
             #podział na zbiory treningowe, walidacyjne i testowe. Proporcje do przedyskutowania
             for series in cluster:
-
+                # plt.plot(series)
+                # plt.show()
+                #okna po 1206 próbek
                 train_ds, validate_ds = train_test_split(series, test_size=0.625)     # 6/16 na train_dataset 
                 validate_ds, test_ds = train_test_split(validate_ds, test_size=0.8)   # 2/16 na validate_set i reszta na test
 
@@ -83,10 +97,10 @@ for dryft_type in dryft_types:
             validate_sequences, _, _ = create_dataset(validate_dataset)
 
 
-            #model
+            #train model
             model = LSTMAutoencoder(seq_len, n_features, embedding_dim=128)  
             model.to(device)
-            model, history = train_model(model, train_sequences, train_sequences, n_epochs=50)
+            model, history = train_model(model, train_sequences, validate_sequences, n_epochs=50)
             print("saveing model")
             torch.save(model, MODELS_PATH+ f'\{model_cnt}')
             
@@ -102,4 +116,11 @@ for dryft_type in dryft_types:
             model_cnt+=1
             plt.close()
         
-        #train model
+            #testing model
+
+            train_prediction, train_losses = detect_anomalies(model, train_sequences)
+            train_mse_loss=np.mean(np.abs(train_prediction, train_sequences),axis=1)
+            test_prediction, test_losses = detect_anomalies(model, test_sequences)
+            test_mae_loss = np.mean(np.abs(test_prediction - test_sequences), axis=1)
+            THRESHOLD = np.percentile(test_mae_loss, 95)
+            plt.show()

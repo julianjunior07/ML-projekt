@@ -141,14 +141,29 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
   return model.eval(), history
 
 
-def detect_anomalies(model, test_dataset, threshold):
-    model.eval()
-    anomalies = []
-    with torch.no_grad():
-        for sequence in test_dataset:
-            sequence = sequence.to(device)
-            prediction = model(sequence)
-            mse = nn.MSELoss(reduction='none')(prediction, sequence).mean(dim=(1, 2))
-            anomalies.extend(mse > threshold)
+def detect_anomalies(model, dataset):
+  predictions, losses = [], []
+  criterion = nn.L1Loss(reduction='sum').to(device)
+  with torch.no_grad():
+    model = model.eval()
+    for sequence in dataset:
+      sequence = sequence.to(device)
+      prediction = model(sequence)
 
-    return anomalies
+      loss = criterion(prediction, sequence)
+
+      predictions.append(prediction.cpu().numpy().flatten())
+      losses.append(loss.item())
+  return predictions, losses
+
+# def detect_anomalies(model, test_dataset, threshold):
+#     model.eval()
+#     anomalies = []
+#     with torch.no_grad():
+#         for sequence in test_dataset:
+#             sequence = sequence.to(device)
+#             prediction = model(sequence)
+#             mse = nn.MSELoss(reduction='sum')(prediction, sequence).mean(dim=(1, 2))
+#             anomalies.extend(mse > threshold)
+
+#     return anomalies
