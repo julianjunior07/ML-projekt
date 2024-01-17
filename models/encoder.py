@@ -91,7 +91,8 @@ class LSTMAutoencoder(nn.Module):
 
 def train_model(model, train_dataset, val_dataset, n_epochs):
   optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-  criterion = nn.L1Loss(reduction='sum').to(device)
+  #criterion = nn.L1Loss(reduction='sum').to(device)
+  criterion = nn.MSELoss().to(device)
   history = dict(train=[], val=[])
 
   best_model_wts = copy.deepcopy(model.state_dict())
@@ -117,12 +118,12 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
     val_losses = []
     model = model.eval()
     with torch.no_grad():
-      for train_sequence in val_dataset:
+      for validate_sequence in val_dataset:
 
-        train_sequence = train_sequence.to(device)
-        output = model(train_sequence)
+        validate_sequence = validate_sequence.to(device)
+        output = model(validate_sequence)
 
-        loss = criterion(output, train_sequence)
+        loss = criterion(output, validate_sequence)
         val_losses.append(loss.item())
 
     train_loss = np.mean(train_losses)
@@ -143,7 +144,8 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
 
 def detect_anomalies(model, dataset):
   predictions, losses = [], []
-  criterion = nn.L1Loss(reduction='sum').to(device)
+  # criterion = nn.L1Loss(reduction='sum').to(device)
+  criterion = nn.MSELoss().to(device)
   with torch.no_grad():
     model = model.eval()
     for sequence in dataset:
