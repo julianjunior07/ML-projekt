@@ -21,6 +21,7 @@ int9:
 - num_layers = 2
 - hidden_size = 64
 - batch_size = 16
+
 us26:
 - ratio = 0.8 #podział danych na treningowe/testowe (80% całego pliku to dane treningowe)
 - liczba próbek: train - 4000, test - 3850
