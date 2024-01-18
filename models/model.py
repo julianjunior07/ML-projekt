@@ -17,12 +17,12 @@ from torchmetrics.functional import mean_absolute_percentage_error
 from clustering import Clustering
 
 # dla danych us26
-path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
-path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
+# path = 'D:\\Polibudka\\Magister\\Sezon 2\\Proj Sieci Komp i ML\\ML\\_dane\\us26\\demands_for_students'
+# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_26'
 
 #dla danych int9
-# path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
-# path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
+path = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_dane\int9\demands_for_students'
+path_figures = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9'
 
 path_to_model = 'D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_9\models'
 # nie dziala zapis xD
@@ -84,10 +84,6 @@ def model_function():
             print("wyswietlanie znormalizowanych testowych wartosci")
             print(*scaled_test[:5]) #pierwsze 5 wierszy testowe
 
-                    # !!!!!!!!
-                    # UWAGA: JAK DAJE SIE ZA DUZO PROBEK, TO MODEL NIE DZIALA TAK JAK POWINIEN (dotyczy MAPE jako loss_fn)
-                    # !!!!!!!!
-
             #tworzenie danych treningowych
             # sequence_length = 11000  # liczba próbek
             # sequence_length = 950 
@@ -129,8 +125,6 @@ def model_function():
             # X_test.shape, y_test.shape
             print("wyswietlanie rozmiaru danych w formie torch.tensor")
             print(X_test.shape,y_test.shape)
-
-            
             
             class LSTMModel_a(nn.Module):
                 # input_size : liczba danych wejsciowych jednoczesnie
@@ -145,11 +139,6 @@ def model_function():
                     out, _ = self.lstm(x)
                     out = self.linear(out)
                     return out
-
-            
-            # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-            # print(device)
-            
             
             input_size = 1
             num_layers = 2
@@ -162,9 +151,6 @@ def model_function():
             # wczytanie modelu dla klastra
             # model = torch.load(path_to_model+'model_klaster_'+str(cluster_number)+'.pth')
             # model.eval()
-            
-            # loss_fn = torch.nn.MSELoss(reduction='mean').to(device=device)
-            #         #!!ADNOTACJA w funkcji utraty lepsze wyniki robi MSE od MAPE, wiec uzywany jest MSE
             
             optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
             
@@ -194,7 +180,6 @@ def model_function():
                 file_losses = open(path_figures+"\_epoch_losses_"+str(len(clusters_avg_lists))+"_MSE_fn.txt", "a")
                 file_losses.write("EPOCH LOSSES klaster nr "+str(cluster_number)+ ": \n")
                 loss_fn = torch.nn.MSELoss(reduction='mean').to(device=device)
-                    #!!ADNOTACJA w funkcji utraty lepsze wyniki robi MSE od MAPE, wiec uzywany jest MSE
             
             # pętla treningowa
             for epoch in range(num_epochs):
@@ -205,10 +190,8 @@ def model_function():
                 for batch_X, batch_y in train_loader:
                     batch_X, batch_y = batch_X.to(device), batch_y.to(device)
                     predictions = model(batch_X)
-                    # loss = loss_fn(predictions, batch_y)
                     if(k==0):
                         loss = mean_absolute_percentage_error(predictions, batch_y).to(device)
-                            # jesli chcemy uzyc MAPE jako funkcji utraty to trzeba zamienic linijki z loss tutaj i ewaluacji danych
                     elif(k==1):
                         loss = loss_fn(predictions, batch_y)
 
@@ -230,13 +213,10 @@ def model_function():
                     for batch_X_test, batch_y_test in test_loader:
                         batch_X_test, batch_y_test = batch_X_test.to(device), batch_y_test.to(device)
                         predictions_test = model(batch_X_test)
-                        # test_loss = loss_fn(predictions_test, batch_y_test)
-                        # test_loss = mean_absolute_percentage_error(predictions_test, batch_y_test).to(device)
                         if(k==0):
-                            test_loss = mean_absolute_percentage_error(predictions, batch_y).to(device)
-                                # jesli chcemy uzyc MAPE jako funkcji utraty to trzeba zamienic linijki z loss tutaj i ewaluacji danych
+                            test_loss = mean_absolute_percentage_error(predictions_test, batch_y_test).to(device)
                         elif(k==1):
-                            test_loss = loss_fn(predictions, batch_y)
+                            test_loss = loss_fn(predictions_test, batch_y_test)
 
                         total_test_loss += test_loss.item()
 
@@ -276,7 +256,6 @@ def model_function():
 
                     #zamiana danych historycznych na przewidziane
                     historical_data = np.roll(historical_data, shift=-1)
-                    # historical_data[-1] = predicted_value
                     np.append(historical_data, predicted_value)
                     
 

@@ -1,64 +1,64 @@
 EPOCH LOSSES klaster nr 1: 
-    Epoch [10/30] - Training Loss: 0.0507257, Test Loss: 0.1649229 
-    Epoch [20/30] - Training Loss: 0.0396627, Test Loss: 0.4715179 
-    Epoch [30/30] - Training Loss: 0.0327965, Test Loss: 0.0693334 
+    Epoch [10/30] - Training Loss: 0.1259023, Test Loss: 0.1283828 
+    Epoch [20/30] - Training Loss: 0.0968365, Test Loss: 0.0516526 
+    Epoch [30/30] - Training Loss: 0.0880314, Test Loss: 0.0934366 
 EPOCH LOSSES klaster nr 2: 
-    Epoch [10/30] - Training Loss: 0.0509689, Test Loss: 0.1553501 
-    Epoch [20/30] - Training Loss: 0.0358777, Test Loss: 0.0882877 
-    Epoch [30/30] - Training Loss: 0.0301079, Test Loss: 0.2720995 
+    Epoch [10/30] - Training Loss: 0.0743645, Test Loss: 0.0535346 
+    Epoch [20/30] - Training Loss: 0.0648332, Test Loss: 0.0800484 
+    Epoch [30/30] - Training Loss: 0.0414395, Test Loss: 0.0398888 
 EPOCH LOSSES klaster nr 3: 
-    Epoch [10/30] - Training Loss: 0.0628777, Test Loss: 0.1376766 
-    Epoch [20/30] - Training Loss: 0.0405819, Test Loss: 0.6682819 
-    Epoch [30/30] - Training Loss: 0.0362035, Test Loss: 0.1976048 
+    Epoch [10/30] - Training Loss: 0.0461256, Test Loss: 0.0250920 
+    Epoch [20/30] - Training Loss: 0.0440833, Test Loss: 0.1702152 
+    Epoch [30/30] - Training Loss: 0.0384168, Test Loss: 0.0302510 
 EPOCH LOSSES klaster nr 4: 
-    Epoch [10/30] - Training Loss: 0.1157216, Test Loss: 0.6798066 
-    Epoch [20/30] - Training Loss: 0.0817643, Test Loss: 0.1782571 
-    Epoch [30/30] - Training Loss: 0.0546907, Test Loss: 0.0377331 
+    Epoch [10/30] - Training Loss: 0.1187825, Test Loss: 0.0975165 
+    Epoch [20/30] - Training Loss: 0.0828533, Test Loss: 0.0504807 
+    Epoch [30/30] - Training Loss: 0.0538984, Test Loss: 0.0702745 
 EPOCH LOSSES klaster nr 5: 
-    Epoch [10/30] - Training Loss: 0.1195958, Test Loss: 0.2789770 
-    Epoch [20/30] - Training Loss: 0.0881379, Test Loss: 0.8726669 
-    Epoch [30/30] - Training Loss: 0.0773809, Test Loss: 1.4653115 
+    Epoch [10/30] - Training Loss: 0.1373999, Test Loss: 0.2378777 
+    Epoch [20/30] - Training Loss: 0.0857947, Test Loss: 0.0348009 
+    Epoch [30/30] - Training Loss: 0.0766254, Test Loss: 0.1009549 
 EPOCH LOSSES klaster nr 6: 
-    Epoch [10/30] - Training Loss: 0.1045172, Test Loss: 0.4160607 
-    Epoch [20/30] - Training Loss: 0.1024042, Test Loss: 0.3449683 
-    Epoch [30/30] - Training Loss: 0.0695032, Test Loss: 0.0373051 
+    Epoch [10/30] - Training Loss: 0.0474156, Test Loss: 0.0173377 
+    Epoch [20/30] - Training Loss: 0.0413705, Test Loss: 0.0184721 
+    Epoch [30/30] - Training Loss: 0.0295847, Test Loss: 0.0748146 
 EPOCH LOSSES klaster nr 7: 
-    Epoch [10/30] - Training Loss: 0.1266520, Test Loss: 2.1938541 
-    Epoch [20/30] - Training Loss: 0.0690290, Test Loss: 1.6372951 
-    Epoch [30/30] - Training Loss: 0.0680479, Test Loss: 1.7153521 
+    Epoch [10/30] - Training Loss: 0.0884641, Test Loss: 0.0936177 
+    Epoch [20/30] - Training Loss: 0.0559398, Test Loss: 0.0480148 
+    Epoch [30/30] - Training Loss: 0.0425556, Test Loss: 0.0390765 
 EPOCH LOSSES klaster nr 8: 
-    Epoch [10/30] - Training Loss: 0.0482770, Test Loss: 0.1265315 
-    Epoch [20/30] - Training Loss: 0.0334388, Test Loss: 0.7893149 
-    Epoch [30/30] - Training Loss: 0.0314516, Test Loss: 1.0758253 
+    Epoch [10/30] - Training Loss: 0.1015768, Test Loss: 0.0546003 
+    Epoch [20/30] - Training Loss: 0.0666964, Test Loss: 0.0888317 
+    Epoch [30/30] - Training Loss: 0.0506750, Test Loss: 0.0417258 
 EPOCH LOSSES klaster nr 9: 
-    Epoch [10/30] - Training Loss: 0.0529864, Test Loss: 1.7652597 
-    Epoch [20/30] - Training Loss: 0.0406139, Test Loss: 0.0259639 
-    Epoch [30/30] - Training Loss: 0.0428882, Test Loss: 0.5530467 
+    Epoch [10/30] - Training Loss: 0.1210585, Test Loss: 0.0700843 
+    Epoch [20/30] - Training Loss: 0.1213398, Test Loss: 0.2685601 
+    Epoch [30/30] - Training Loss: 0.0826874, Test Loss: 0.0483522 
 EPOCH LOSSES klaster nr 10: 
-    Epoch [10/30] - Training Loss: 0.0747376, Test Loss: 1.0174600 
-    Epoch [20/30] - Training Loss: 0.0532203, Test Loss: 2.1392317 
-    Epoch [30/30] - Training Loss: 0.0425688, Test Loss: 1.8053532 
+    Epoch [10/30] - Training Loss: 0.0990713, Test Loss: 0.0882428 
+    Epoch [20/30] - Training Loss: 0.0690960, Test Loss: 0.0703467 
+    Epoch [30/30] - Training Loss: 0.0445131, Test Loss: 0.0562313 
 EPOCH LOSSES klaster nr 11: 
-    Epoch [10/30] - Training Loss: 0.0968658, Test Loss: 0.3874599 
-    Epoch [20/30] - Training Loss: 0.0909860, Test Loss: 0.1902910 
-    Epoch [30/30] - Training Loss: 0.0533868, Test Loss: 0.1378333 
+    Epoch [10/30] - Training Loss: 0.1117842, Test Loss: 0.0650509 
+    Epoch [20/30] - Training Loss: 0.0871240, Test Loss: 0.0710959 
+    Epoch [30/30] - Training Loss: 0.0878450, Test Loss: 0.0606458 
 EPOCH LOSSES klaster nr 12: 
-    Epoch [10/30] - Training Loss: 0.1343015, Test Loss: 0.5758877 
-    Epoch [20/30] - Training Loss: 0.0899704, Test Loss: 1.3586560 
-    Epoch [30/30] - Training Loss: 0.0768415, Test Loss: 1.4352428 
+    Epoch [10/30] - Training Loss: 0.0596511, Test Loss: 0.0380096 
+    Epoch [20/30] - Training Loss: 0.0488095, Test Loss: 0.0395098 
+    Epoch [30/30] - Training Loss: 0.0357274, Test Loss: 0.0486483 
 EPOCH LOSSES klaster nr 13: 
-    Epoch [10/30] - Training Loss: 0.0552408, Test Loss: 2.3132634 
-    Epoch [20/30] - Training Loss: 0.0448969, Test Loss: 1.5948657 
-    Epoch [30/30] - Training Loss: 0.0440993, Test Loss: 1.1576090 
+    Epoch [10/30] - Training Loss: 0.1013026, Test Loss: 0.0454624 
+    Epoch [20/30] - Training Loss: 0.0704312, Test Loss: 0.0316700 
+    Epoch [30/30] - Training Loss: 0.0537593, Test Loss: 0.0549124 
 EPOCH LOSSES klaster nr 14: 
-    Epoch [10/30] - Training Loss: 0.1201004, Test Loss: 1.1248809 
-    Epoch [20/30] - Training Loss: 0.0990125, Test Loss: 1.2215527 
-    Epoch [30/30] - Training Loss: 0.0736854, Test Loss: 0.3797131 
+    Epoch [10/30] - Training Loss: 0.0405549, Test Loss: 0.2564011 
+    Epoch [20/30] - Training Loss: 0.0330873, Test Loss: 0.0243058 
+    Epoch [30/30] - Training Loss: 0.0399415, Test Loss: 0.0240714 
 EPOCH LOSSES klaster nr 15: 
-    Epoch [10/30] - Training Loss: 0.0748466, Test Loss: 0.1919883 
-    Epoch [20/30] - Training Loss: 0.0583603, Test Loss: 0.7619143 
-    Epoch [30/30] - Training Loss: 0.0461215, Test Loss: 0.6306036 
+    Epoch [10/30] - Training Loss: 0.1176861, Test Loss: 0.1861081 
+    Epoch [20/30] - Training Loss: 0.0924807, Test Loss: 0.2132398 
+    Epoch [30/30] - Training Loss: 0.0704305, Test Loss: 0.0591077 
 EPOCH LOSSES klaster nr 16: 
-    Epoch [10/30] - Training Loss: 0.0993119, Test Loss: 2.3058825 
-    Epoch [20/30] - Training Loss: 0.0698366, Test Loss: 3.2515438 
-    Epoch [30/30] - Training Loss: 0.0500373, Test Loss: 1.2619098 
+    Epoch [10/30] - Training Loss: 0.0512671, Test Loss: 0.0380121 
+    Epoch [20/30] - Training Loss: 0.0360525, Test Loss: 0.0245847 
+    Epoch [30/30] - Training Loss: 0.0308201, Test Loss: 0.0277334 
