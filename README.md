@@ -12,7 +12,9 @@ aby uruchomić:
 - model autoencoderów do wykrywania anomalii, uruchomić plik encoder.py
 
 Predykcja wartości bitrate robione zarówno dla MAPE i MSE jako loss function w modelu:
+
 parametry:
+
 int9:
 - ratio = 0.8 #podział danych na treningowe/testowe (80% całego pliku to dane treningowe)
 - liczba próbek: train - 11000, test - 3850
