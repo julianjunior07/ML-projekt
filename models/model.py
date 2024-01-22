@@ -176,9 +176,13 @@ def model_function():
             if(k==0):
                 file_losses = open(path_figures+"\_epoch_losses_"+str(len(clusters_avg_lists))+"_MAPE_fn.txt", "a")
                 file_losses.write("EPOCH LOSSES klaster nr "+str(cluster_number)+ ": \n")
+                # file_losses = open("D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\_epoch_losses.txt", "a")
+                # file_losses.write("484   EPOCH LOSSES MAPE: \n")
             elif(k==1):
                 file_losses = open(path_figures+"\_epoch_losses_"+str(len(clusters_avg_lists))+"_MSE_fn.txt", "a")
                 file_losses.write("EPOCH LOSSES klaster nr "+str(cluster_number)+ ": \n")
+                # file_losses = open("D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\_epoch_losses.txt", "a")
+                # file_losses.write("484   EPOCH LOSSES MSE: \n")
                 loss_fn = torch.nn.MSELoss(reduction='mean').to(device=device)
             
             # pętla treningowa
@@ -270,14 +274,18 @@ def model_function():
             plt.plot([])
             # cluster_number = z+1
             plt.suptitle(f"Cluster {cluster_number}")
+            # plt.suptitle(f"File 177")
+            
             plt.xlabel('number')
             plt.ylabel('bitrate')
             plt.legend()
             plt.tight_layout()
             if(k==0):
                 plt.savefig(path_figures+'\Cluster_'+str(cluster_number)+'_MAPE_fn.png')
+                # plt.savefig('D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\File_484_MAPE_fn.png')
             elif(k==1):
                 plt.savefig(path_figures+'\Cluster_'+str(cluster_number)+'_MSE_fn.png')
+                # plt.savefig('D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\File_484_MSE_fn.png')
 
             plt.close()
             # plt.show()
@@ -292,16 +300,20 @@ def model_function():
             )
 
             print("Klaster nr " + str(cluster_number) + " wyswietlanie bledu MAPE")
+            # print("File 484 wyswietlanie bledu MAPE")
             print(f"test error MAPE: {error_mape*100}%")
             
             # zapis wartosci bledu do pliku
             if(k==0):
                 file_errors = open(path_figures+"\error_values_"+str(len(clusters_avg_lists))+"_MAPE_fn.txt", "a")
+                # file_errors = open("D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\error_values_MAPE_fn.txt", "a")
             elif(k==1):
                 file_errors = open(path_figures+"\error_values_"+str(len(clusters_avg_lists))+"_MSE_fn.txt", "a")
+                # file_errors = open("D:\Polibudka\Magister\Sezon 2\Proj Sieci Komp i ML\ML\_kod_github\ML-projekt\_figures_single_file\error_values_MSE_fn.txt", "a")
             file_errors.write("MAPE klaster nr "+str(cluster_number)+ ": " +str(error_mape*100)+"% \n")
+            # file_errors.write("MAPE file 484: " +str(error_mape*100)+"% \n")
             file_errors.close()
-        
+
         k+1
  
 model_function()

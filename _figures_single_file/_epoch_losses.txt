@@ -1,0 +1,33 @@
+
+42   EPOCH LOSSES MAPE: 
+    Epoch [10/30] - Training Loss: 0.0739123, Test Loss: 0.8193862 
+    Epoch [20/30] - Training Loss: 0.0419831, Test Loss: 0.6229657 
+    Epoch [30/30] - Training Loss: 0.0366412, Test Loss: 0.9456514 
+42   EPOCH LOSSES MSE: 
+    Epoch [10/30] - Training Loss: 0.0001085, Test Loss: 0.0001047 
+    Epoch [20/30] - Training Loss: 0.0000643, Test Loss: 0.0000675 
+    Epoch [30/30] - Training Loss: 0.0000393, Test Loss: 0.0000714 
+72   EPOCH LOSSES MAPE: 
+    Epoch [10/30] - Training Loss: 0.0544130, Test Loss: 0.1393607 
+    Epoch [20/30] - Training Loss: 0.0498932, Test Loss: 0.0912571 
+    Epoch [30/30] - Training Loss: 0.0407145, Test Loss: 0.1912964 
+72   EPOCH LOSSES MSE: 
+    Epoch [10/30] - Training Loss: 0.0000294, Test Loss: 0.0000237 
+    Epoch [20/30] - Training Loss: 0.0000199, Test Loss: 0.0000167 
+    Epoch [30/30] - Training Loss: 0.0000140, Test Loss: 0.0000128 
+177   EPOCH LOSSES MAPE: 
+    Epoch [10/30] - Training Loss: 0.0393542, Test Loss: 0.1084105 
+    Epoch [20/30] - Training Loss: 0.0338223, Test Loss: 0.5345687 
+    Epoch [30/30] - Training Loss: 0.0319436, Test Loss: 0.7303391 
+177   EPOCH LOSSES MSE: 
+    Epoch [10/30] - Training Loss: 0.0000413, Test Loss: 0.0000480 
+    Epoch [20/30] - Training Loss: 0.0000342, Test Loss: 0.0000417 
+    Epoch [30/30] - Training Loss: 0.0000186, Test Loss: 0.0000340 
+484   EPOCH LOSSES MAPE: 
+    Epoch [10/30] - Training Loss: 0.0727852, Test Loss: 0.5810505 
+    Epoch [20/30] - Training Loss: 0.0634395, Test Loss: 0.3075781 
+    Epoch [30/30] - Training Loss: 0.0500759, Test Loss: 0.9554574 
+484   EPOCH LOSSES MSE: 
+    Epoch [10/30] - Training Loss: 0.0000394, Test Loss: 0.0000474 
+    Epoch [20/30] - Training Loss: 0.0000279, Test Loss: 0.0000378 
+    Epoch [30/30] - Training Loss: 0.0000179, Test Loss: 0.0000268 
