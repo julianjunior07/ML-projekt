@@ -25,9 +25,9 @@ dryft_plcements = [
 
 DRYFT_PLACEMENT=3/4
 
-EPOCHS = 100
+EPOCHS = 160
 # możliwe rozmiary: 5, 17, 85, 227, 1135, 3859
-TIME_STAMPS = 1135
+TIME_STAMPS = 227
 DIM = 64
         
 #funkcja pomocnicza do orabiania danych
@@ -122,7 +122,7 @@ for dryft_type in dryft_types:
             #train model
             model = LSTMAutoencoder(seq_len, n_features, embedding_dim=DIM)  
             model.to(device)
-            model, history, train_loss = train_model(model, train_sequences, validate_sequences, n_epochs=50)
+            model, history, train_loss = train_model(model, train_sequences, validate_sequences, n_epochs=EPOCHS)
             
             file_losses = open('..\imgs'+dryft_type+dryft_placement+'\model_training_losses'+ str(model_cnt)+'.txt', "a")
             file_losses.write(f'{train_loss}\n')

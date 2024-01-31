@@ -93,7 +93,7 @@ class LSTMAutoencoder(nn.Module):
 def detect_anomalies(model, dataset):
   predictions, losses = [], []
   # criterion = nn.L1Loss(reduction='sum').to(device)
-  criterion = nn.MSELoss()
+  criterion = nn.MSELoss(reduction="sum").to(device)
   with torch.no_grad():
     model = model.eval()
     for sequence in dataset:
@@ -137,7 +137,7 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
     val_losses = []
     model = model.eval()
     
-    if epoch%10==0:
+    if epoch%20==0:
       output = model(train_sequence)
       plt.plot(train_sequence.cpu().detach().numpy())
       plt.plot(output.cpu().detach().numpy())
