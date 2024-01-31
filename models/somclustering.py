@@ -45,19 +45,6 @@ class SOMClustering():
         # plt.show()
         plt.close()
         
-    def plot_som_series_dba_center(self):
-        win_map = self.som.win_map(self.data_series)
-        for x in range(self.som_x):
-            for y in range(self.som_y):
-                cluster = (x,y)
-                if cluster in win_map.keys():
-                    for series in win_map[cluster]:
-                        plt.plot(series,c="gray",alpha=0.5) 
-                    plt.plot(np.average(dtw_barycenter_averaging(np.vstack(win_map[cluster])),c="red"))
-                cluster_number = x*self.som_y+y+1
-                plt.figure(f"Cluster {cluster_number}")
-        plt.show()
-        
     def get_clusters_average(self):
         win_map = self.som.win_map(self.data_series)
         cluster_average = []
