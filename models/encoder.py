@@ -137,7 +137,7 @@ def train_model(model, train_dataset, val_dataset, n_epochs):
     val_losses = []
     model = model.eval()
     
-    if epoch%200==0:
+    if epoch%500==0:
       output = model(train_sequence)
       plt.plot(train_sequence.cpu().detach().numpy())
       plt.plot(output.cpu().detach().numpy())

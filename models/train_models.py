@@ -25,7 +25,7 @@ dryft_plcements = [
 
 DRYFT_PLACEMENT=3/4
 
-EPOCHS = 1220
+EPOCHS = 3000
 # możliwe rozmiary: 5, 17, 85, 227, 1135, 3859
 TIME_STAMPS = 227
 DIM = 16
