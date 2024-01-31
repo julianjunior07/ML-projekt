@@ -25,10 +25,10 @@ dryft_plcements = [
 
 DRYFT_PLACEMENT=3/4
 
-EPOCHS = 160
+EPOCHS = 1220
 # możliwe rozmiary: 5, 17, 85, 227, 1135, 3859
 TIME_STAMPS = 227
-DIM = 64
+DIM = 16
         
 #funkcja pomocnicza do orabiania danych
 def create_dataset(sequences):
