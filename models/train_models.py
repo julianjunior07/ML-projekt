@@ -28,7 +28,7 @@ DRYFT_PLACEMENT=3/4
 EPOCHS = 100
 # możliwe rozmiary: 5, 17, 85, 227, 1135, 3859
 TIME_STAMPS = 1135
-        
+DIM = 64
         
 #funkcja pomocnicza do orabiania danych
 def create_dataset(sequences):
@@ -120,7 +120,7 @@ for dryft_type in dryft_types:
 
 
             #train model
-            model = LSTMAutoencoder(seq_len, n_features)  
+            model = LSTMAutoencoder(seq_len, n_features, embedding_dim=DIM)  
             model.to(device)
             model, history, train_loss = train_model(model, train_sequences, validate_sequences, n_epochs=50)
             
